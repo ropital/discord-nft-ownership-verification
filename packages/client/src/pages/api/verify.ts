@@ -4,13 +4,7 @@ import { NextApiRequest, NextApiResponse } from "next";
 import { Client, Intents } from "discord.js";
 const ERC721 = import("../../contracts/CryptoCocoA.json");
 
-const client = new Client({
-  intents: [
-    Intents.FLAGS.GUILDS,
-    Intents.FLAGS.GUILD_MEMBERS,
-    Intents.FLAGS.GUILD_INTEGRATIONS,
-  ],
-});
+const client = new Client();
 
 const contractAddress = process.env.NEXT_PUBLIC_ERC721_ADDRESS || "";
 const discordToken = process.env.NEXT_PUBLIC_DISCORD_TOKEN || "";
