@@ -50,7 +50,7 @@ export const useWallet = (): UseWalletReturns => {
     const signer = provider.getSigner(0);
     setSigner(signer);
 
-    const nftContract = await getNFTContract(signer);
+    const nftContract = await getNFTContract(signer as ethers.Signer);
     setNftContract(nftContract);
   };
 
