@@ -8,13 +8,15 @@ const client = new Client();
 
 const contractAddress = process.env.NEXT_PUBLIC_ERC721_ADDRESS || "";
 const discordToken = process.env.NEXT_PUBLIC_DISCORD_TOKEN || "";
+const projectId = process.env.NEXT_PUBLIC_INFURA_APP_KEY || "";
+const network = process.env.NEXT_PUBLIC_NETWORK || "rinkeby";
 const guildId = "919137865798127617";
 const cocoaRole = "940442097583009833";
 const message = "Have a good dapp dev!";
 
 const provider = new ethers.providers.InfuraWebSocketProvider(
-  "rinkeby",
-  "74ac4f6074e1498daa7c80e01e089f75"
+  network,
+  projectId
 ) as Provider;
 
 export default async function handler(
