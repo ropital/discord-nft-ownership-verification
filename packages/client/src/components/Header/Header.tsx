@@ -20,17 +20,17 @@ export const Header: VFC<Props> = ({
       <HStack justifyContent="space-between" alignItems="center">
         <HStack alignItems="center">
           <Text fontSize="22px" fontWeight="bold" mr="30px">
-            NFT Minter
+            NFT Verifier
           </Text>
 
-          <HStack gap="20px">
+          {/* <HStack gap="20px">
             <NextLink href="/page1">
               <Link fontSize="18px">Link1</Link>
             </NextLink>
             <NextLink href="/page2">
               <Link fontSize="18px">Link2</Link>
             </NextLink>
-          </HStack>
+          </HStack> */}
         </HStack>
 
         <Box>
