@@ -5,12 +5,11 @@ import {
   Center,
   Flex,
   Heading,
-  Text,
+  Link,
   useToast,
 } from "@chakra-ui/react";
 import { Header } from "components/Header/Header";
 import { useWalletContext } from "context/WalletProvider";
-import { ethers } from "ethers";
 import type { NextPage } from "next";
 import { useEffect, useState } from "react";
 
@@ -67,16 +66,39 @@ const Home: NextPage = () => {
       setIsVerifing(true);
       const res = await wallet.nftContract.balanceOf(wallet.accountAddress);
 
-      if (res.toNumber() === 0) return;
+      if (res.toNumber() === 0) {
+        toast({
+          status: "error",
+          title: "CryproCocoAを所有していません。購入する必要があります。",
+        });
+        setIsVerifing(false);
+        setIsVerified(false);
+        return;
+      }
 
-      setIsVerified(true);
-      setIsVerifing(false);
       const message = await wallet.signer.signMessage("Have a good dapp dev!");
       const result = await fetch(`/api/verify?&mes=${message}&user=${user.id}`);
-      console.log(await result.json());
+      if (result.status === 200) {
+        setIsVerified(true);
+        setIsVerifing(false);
+        toast({
+          status: "success",
+          title: "Success!",
+        });
+      } else {
+        const data = await result.json();
+        throw new Error(data.message);
+      }
     } catch (error) {
       console.log(error);
       setIsVerifing(false);
+      if (error instanceof Error) {
+        toast({
+          status: "error",
+          title: "Error",
+          description: error.message,
+        });
+      }
     }
   };
 
@@ -95,7 +117,6 @@ const Home: NextPage = () => {
             <Avatar src={user.avatar} size="2xl" />
           </Center>
         )}
-
         {!wallet.isConnected && (
           <Button
             mt="30px"
@@ -107,7 +128,7 @@ const Home: NextPage = () => {
             Connect wallet
           </Button>
         )}
-        {wallet.isConnected && (
+        {wallet.isConnected && !isVerified && (
           <Button
             mt="30px"
             w="300px"
@@ -118,6 +139,27 @@ const Home: NextPage = () => {
           >
             Verify
           </Button>
+        )}
+        {isVerified && (
+          <Link
+            target="_blank"
+            rel="noreferrer"
+            href={process.env.NEXT_PUBLIC_DISCORD_CHANNEL_URL}
+            mt="20px"
+          >
+            <Button>Move to the discord channel</Button>
+          </Link>
+        )}
+        {!isVerified && (
+          <Link
+            target="_blank"
+            rel="noreferrer"
+            textDecoration="underline"
+            href={process.env.NEXT_PUBLIC_OPENSEA_COLLECTION_URL}
+            mt="20px"
+          >
+            Buy from OpenSea
+          </Link>
         )}
       </Flex>
     </Box>
